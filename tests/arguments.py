@@ -33,6 +33,11 @@ class VerminArgumentsTests(VerminTest):
     self.assertContainsDict({"code": 0, "paths": []}, self.parse_args(["--quiet"]))
     self.assertTrue(self.config.quiet())
 
+  def test_no_quiet(self):
+    self.config.set_quiet(True)
+    self.assertContainsDict({"code": 0, "paths": []}, self.parse_args(["--no-quiet"]))
+    self.assertFalse(self.config.quiet())
+
   def test_verbose(self):
     self.assertEqual(0, self.config.verbose())
     for n in range(1, 10):
@@ -109,6 +114,11 @@ class VerminArgumentsTests(VerminTest):
     self.assertContainsDict({"code": 0, "paths": []}, self.parse_args(["--ignore"]))
     self.assertTrue(self.config.ignore_incomp())
 
+  def test_no_ignore(self):
+    self.config.set_ignore_incomp(True)
+    self.assertContainsDict({"code": 0, "paths": []}, self.parse_args(["--no-ignore"]))
+    self.assertFalse(self.config.ignore_incomp())
+
   @VerminTest.parameterized_args([
     (["-q"], {"code": 0, "paths": []}, DEFAULT_PROCESSES),
 
@@ -144,9 +154,19 @@ class VerminArgumentsTests(VerminTest):
     self.assertContainsDict({"code": 0, "paths": []}, self.parse_args(["--lax"]))
     self.assertTrue(self.config.lax())
 
+  def test_no_lax(self):
+    self.config.set_lax(True)
+    self.assertContainsDict({"code": 0, "paths": []}, self.parse_args(["--no-lax"]))
+    self.assertFalse(self.config.lax())
+
   def test_hidden(self):
     self.assertContainsDict({"code": 0}, self.parse_args(["--hidden"]))
     self.assertTrue(self.config.analyze_hidden())
+
+  def test_no_hidden(self):
+    self.config.set_analyze_hidden(True)
+    self.assertContainsDict({"code": 0, "paths": []}, self.parse_args(["--no-hidden"]))
+    self.assertFalse(self.config.analyze_hidden())
 
   def test_versions(self):
     self.assertContainsDict({"versions": True}, self.parse_args(["--versions"]))
@@ -261,6 +281,11 @@ aaa
     self.assertFalse(self.config.pessimistic())
     self.assertContainsDict({"code": 0}, self.parse_args(["--pessimistic"]))
     self.assertTrue(self.config.pessimistic())
+
+  def test_no_pessimistic(self):
+    self.config.set_pessimistic(True)
+    self.assertContainsDict({"code": 0, "paths": []}, self.parse_args(["--no-pessimistic"]))
+    self.assertFalse(self.config.pessimistic())
 
   def test_config_file(self):
     fp = ScopedTemporaryFile()

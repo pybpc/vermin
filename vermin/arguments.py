@@ -49,6 +49,8 @@ class Arguments:
       print("\nOptions:")
       print("  --quiet | -q\n"
             "        Quiet mode. It only prints the final versions verdict.\n")
+      print("  --no-quiet\n"
+            "        Disable quiet mode.\n")
       print("  -v..  Verbosity level 1 to 4. -v, -vv, -vvv, and -vvvv shows increasingly more\n"
             "        information.\n"
             "        -v     will show the individual versions required per file.\n"
@@ -68,10 +70,14 @@ class Arguments:
             "        Ignore incompatible versions and warnings. However, if no compatible\n"
             "        versions are found then incompatible versions will be shown in the end to\n"
             "        not have an absence of results.\n")
+      print("  --no-ignore\n"
+            "        Don't ignore incompatible versions and warnings.\n")
       print("  --lax | -l\n"
             "        Lax mode: ignores conditionals (if, ternary, for, async for, while, with,\n"
             "        try, bool op) on AST traversal, which can be useful when minimum versions\n"
             "        are detected in conditionals that it is known does not affect the results.\n")
+      print("  --no-lax\n"
+            "        Disable lax mode.\n")
       print("  -d    Dump AST node visits.")
       print("\n  --help | -h\n"
             "        Shows this information and exists.")
@@ -86,6 +92,8 @@ class Arguments:
       print("\n  --hidden\n"
             "        Analyze 'hidden' files and folders starting with '.' (ignored by default\n"
             "        when not specified directly).")
+      print("\n  --no-hidden\n"
+            "        Don't analyze hidden files and folders.")
       print("\n  --versions\n"
             "        In the end, print all unique versions required by the analysed code.")
       print("\n  --no-tips\n"
@@ -94,6 +102,8 @@ class Arguments:
       print("\n  --pessimistic\n"
             "        Pessimistic mode: syntax errors are interpreted as the major Python version\n"
             "        in use being incompatible.")
+      print("\n  --no-pessimistic\n"
+            "        Disable pessimistic mode.")
       print("\n  --format <name> | -f <name>\n"
             "        Format to show results and output in.\n"
             "        Supported formats:\n{}".format(formats.help_str(10)))
@@ -175,6 +185,9 @@ class Arguments:
       elif arg in ("--quiet", "-q"):
         config.set_quiet(True)
         path_pos += 1
+      elif arg == "--no-quiet":
+        config.set_quiet(False)
+        path_pos += 1
       elif arg.startswith("-v"):
         config.set_verbose(arg.count("v"))
         path_pos += 1
@@ -186,6 +199,9 @@ class Arguments:
         path_pos += 1
       elif arg in ("--ignore", "-i"):
         config.set_ignore_incomp(True)
+        path_pos += 1
+      elif arg == "--no-ignore":
+        config.set_ignore_incomp(False)
         path_pos += 1
       elif arg.startswith("-p=") or arg.startswith("--processes="):
         value = arg.split("=")[1]
@@ -203,11 +219,17 @@ class Arguments:
         print("Running in lax mode!")
         config.set_lax(True)
         path_pos += 1
+      elif arg == "--no-lax":
+        config.set_lax(False)
+        path_pos += 1
       elif arg == "-d":
         config.set_print_visits(True)
         path_pos += 1
       elif arg == "--hidden":
         config.set_analyze_hidden(True)
+        path_pos += 1
+      elif arg == "--no-hidden":
+        config.set_analyze_hidden(False)
         path_pos += 1
       elif arg == "--versions":
         versions = True
@@ -257,6 +279,9 @@ class Arguments:
         path_pos += 2
       elif arg == "--pessimistic":
         config.set_pessimistic(True)
+        path_pos += 1
+      elif arg == "--no-pessimistic":
+        config.set_pessimistic(False)
         path_pos += 1
 
     if fmt is not None:
